@@ -1,0 +1,19 @@
+.brand-mark{display:block;object-fit:contain;object-position:center;flex-shrink:0}
+.site-header .monogram{display:flex;align-items:center;justify-content:flex-start;letter-spacing:normal;font-size:inherit;height:76px}
+.site-header .monogram .brand-mark{width:64px;height:68px}
+.hero-seal>.brand-mark{position:absolute;width:66px;height:70px;top:10px;left:21px}
+.hero-seal small{bottom:14px}
+.closing>.brand-mark{width:78px;height:82px;margin:0 auto 20px}
+.footer-brand>.brand-mark{width:34px;height:37px}
+.login-monogram{font-size:inherit;letter-spacing:normal}
+.login-card .login-monogram>.brand-mark{width:105px;height:110px;margin:0 auto}
+.admin-sidebar>.login-monogram>.brand-mark{width:83px;height:88px}
+@media(max-width:760px){
+  .site-header .monogram{height:61px}
+  .site-header .monogram .brand-mark{width:48px;height:52px}
+  .hero-seal>.brand-mark{width:43px;height:47px;top:7px;left:15px}
+  .hero-seal small{bottom:9px;font-size:6px}
+  .admin-sidebar>.login-monogram>.brand-mark{width:39px;height:42px}
+  .closing>.brand-mark{width:67px;height:72px}
+  .footer-brand>.brand-mark{width:30px;height:33px}
+}
