@@ -6,7 +6,7 @@ A [análise da referência e dos pagamentos](docs/REFERENCIA-E-PAGAMENTOS.md) fo
 
 O monograma MG usa uma versão com fundo transparente preparada a partir da logo enviada pelo casal. Ele aparece no cabeçalho, rodapé e área administrativa. A prévia inclui uma versão WebP otimizada e um ícone de aba menor; o arquivo original `public/wedding-logo.png` está preservado.
 
-As fotos de memes vieram do ZIP enviado pelo usuário. As fotos de aspirador, air fryer, panelas e cafeteira são imagens ilustrativas geradas para o projeto, sem marca ou modelo prometido. Os valores são sugestões de contribuição, não ofertas de uma loja. Os detalhes de cada presente ficam na janela de seleção, mantendo a lista visualmente enxuta.
+As fotos de humor incluem o ZIP enviado pelo usuário e templates pesquisados na coleção pública memegen, cujas fontes estão registradas em [meme-sources.md](public/licenses/meme-sources.md). As fotos de aspirador, air fryer, panelas e cafeteira são imagens ilustrativas geradas para o projeto, sem marca ou modelo prometido. Os valores são sugestões de contribuição, não ofertas de uma loja. Os detalhes de cada presente ficam na janela de seleção, mantendo a lista visualmente enxuta.
 
 ## Abrir com um clique no arquivo
 

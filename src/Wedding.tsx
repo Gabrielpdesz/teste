@@ -106,7 +106,7 @@ export function Wedding() {
         </div>
         <div className="results-line"><span>{loading?'Preparando a lista…':`${Math.min(limit,visible.length)} de ${visible.length} presentes`}</span><span>Contribuições simbólicas · valores sugeridos</span></div>
         {error&&<div className="error-message" role="alert">{error} <button onClick={()=>{setLoading(true);void load();}}>Tentar novamente</button></div>}
-        {loading?<div className="gift-grid">{Array.from({length:8},(_,i)=><div className="skeleton" key={i}/>)}</div>:<div className="gift-grid">{visible.slice(0,limit).map(g=><article key={g.id} className={`gift-card ${g.available?'':'unavailable'}`} data-category={g.category}>
+        {loading?<div className="gift-grid">{Array.from({length:8},(_,i)=><div className="skeleton" key={i}/>)}</div>:<div className="gift-grid">{visible.slice(0,limit).map(g=><article key={g.id} className={`gift-card ${g.available?'':'unavailable'}`} data-category={g.category} data-gift-id={g.id}>
           <button className="gift-image-button" disabled={!g.available} onClick={()=>setSelected(g)} aria-label={`Ver ${g.name}`}><img src={g.image_url} alt={g.name} loading="lazy"/><span className="gift-image-heart"><ArrowUpRight size={19}/></span></button>
           <div className="gift-info"><h3>{g.name}</h3><div className="gift-bottom"><span className="gift-price">{money(g.price_cents)}</span><button className="gift-action" disabled={!g.available} onClick={()=>setSelected(g)}>{g.available?'Presentear':'Reservado'}{g.available?<ArrowRight size={14}/>:<Check size={14}/>}</button></div></div>
         </article>)}</div>}

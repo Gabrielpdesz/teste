@@ -203,3 +203,9 @@
   .wedding-v2 .gift-price{font-size:16px}
   .wedding-v2 .search-input input{font-size:10px}
 }
+
+/* Keep the complete two-panel template while cropping its unused caption area. */
+.wedding-v2 .gift-card[data-gift-id="hotel"] .gift-image-button img{position:absolute;left:0;top:50%;width:200%;max-width:none;height:auto;object-fit:initial;transform:translateY(-50%);transform-origin:left center}
+.wedding-v2 .gift-card[data-gift-id="hotel"] .gift-image-button:hover img{transform:translateY(-50%) scale(1.02)}
+.wedding-v2 .gift-card[data-gift-id="cafe"] .gift-image-button img{object-position:left center}
+.selected-gift[data-gift-id="hotel"]>img{object-position:left center}

@@ -2,7 +2,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { randomUUID, randomBytes, createHash } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { initialGifts } from './catalog.js';
+import { initialGifts, previousGiftImages } from './catalog.js';
 import legacyGifts from './legacy-catalog.json' with { type: 'json' };
 
 export const digest = (value) => createHash('sha256').update(value).digest('hex');
@@ -53,6 +53,17 @@ export function createStore(path = ':memory:') {
       db.prepare('INSERT INTO schema_migrations (name) VALUES (?)').run('visual-catalog-2026-11-02');
       db.exec('COMMIT');
     } catch (e) { db.exec('ROLLBACK'); throw e; }
+  }
+  if (!db.prepare('SELECT 1 FROM schema_migrations WHERE name=?').get('gift-meme-images-2026-11-02')) {
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      for(const [id,previous] of Object.entries(previousGiftImages)){
+        const next=initialGifts.find(g=>g.id===id);
+        db.prepare('UPDATE gifts SET image_url=? WHERE id=? AND image_url=?').run(next.image_url,id,`/gifts/${previous}`);
+      }
+      db.prepare('INSERT INTO schema_migrations (name) VALUES (?)').run('gift-meme-images-2026-11-02');
+      db.exec('COMMIT');
+    }catch(error){db.exec('ROLLBACK');throw error;}
   }
   const order = (id) => db.prepare('SELECT * FROM orders WHERE id=?').get(id);
   return {

@@ -16,14 +16,19 @@ export const initialGifts = [
   ['pets', 'O rango dos nossos futuros hóspedes', 'Uma contribuição para os amigos de quatro patas. Porque amor também vem com pelos.', 18000, 'Carinhos', 'pets.jpg', 'Os pets também participam'],
   ['rolo', 'Rolo de macarrão da chef', 'Para as massas caseiras e as receitas que vão virar tradição.', 9000, 'Nosso lar', 'rolo.jpg', 'Receita de família'],
   ['academia', 'Projeto casal fitness', 'Uma ajudinha para compensar os docinhos da festa. Começamos na segunda, prometemos.', 22000, 'Memes', 'academia.jpg', 'Segunda-feira a gente começa'],
-  ['praia', 'Um dia de sol na lua de mel', 'Pés na areia, água de coco e tempo para aproveitar a companhia um do outro.', 35000, 'Lua de mel', 'beach.svg', 'Pés na areia'],
-  ['viagem', 'Uma aventura na lua de mel', 'Ajude a transformar um passeio em uma daquelas histórias que vamos contar para sempre.', 50000, 'Lua de mel', 'travel.svg', 'Memórias a dois'],
-  ['hotel', 'Uma noite nas nuvens', 'Uma diária especial para aproveitar os primeiros dias de casados.', 85000, 'Lua de mel', 'hotel.svg', 'Nosso primeiro destino'],
-  ['malas', 'As malas para a nossa aventura', 'Uma contribuição para levar os sonhos — e um pouquinho de bagagem — para a lua de mel.', 30000, 'Lua de mel', 'luggage.svg', 'Vamos pelo mundo'],
-  ['cafe', 'Um café antes do nosso “sim”', 'Para começar esse novo capítulo com o coração quentinho e uma boa xícara de café.', 7500, 'Carinhos', 'coffee.svg', 'Um pequeno carinho'],
-  ['jantar', 'Nosso primeiro jantar de casados', 'Uma noite especial, comida boa e aquela conversa que a gente nunca quer que termine.', 25000, 'Nosso lar', 'dinner.svg', 'Um brinde ao começo'],
-  ['spa', 'Uma pausa só para nós dois', 'Um dia tranquilo de cuidado e descanso depois de toda a emoção do casamento.', 40000, 'Lua de mel', 'spa.svg', 'Modo descanso'],
-  ['doces', 'Adoçar a nossa nova vida', 'Porque toda boa história de amor merece uma sobremesa para dividir.', 12000, 'Carinhos', 'sweets.svg', 'Dividir a sobremesa'],
+  ['praia', 'Um dia de sol na lua de mel', 'Pés na areia, água de coco e tempo para aproveitar a companhia um do outro.', 35000, 'Lua de mel', 'praia-meme.webp', 'Pés na areia'],
+  ['viagem', 'Uma aventura na lua de mel', 'Ajude a transformar um passeio em uma daquelas histórias que vamos contar para sempre.', 50000, 'Lua de mel', 'viagem-meme.webp', 'Memórias a dois'],
+  ['hotel', 'Uma noite nas nuvens', 'Uma diária especial para aproveitar os primeiros dias de casados.', 85000, 'Lua de mel', 'hotel-meme.webp', 'Nosso primeiro destino'],
+  ['malas', 'As malas para a nossa aventura', 'Uma contribuição para levar os sonhos — e um pouquinho de bagagem — para a lua de mel.', 30000, 'Lua de mel', 'malas-meme.webp', 'Vamos pelo mundo'],
+  ['cafe', 'Um café antes do nosso “sim”', 'Para começar esse novo capítulo com o coração quentinho e uma boa xícara de café.', 7500, 'Carinhos', 'cafe-meme.webp', 'Um pequeno carinho'],
+  ['jantar', 'Nosso primeiro jantar de casados', 'Uma noite especial, comida boa e aquela conversa que a gente nunca quer que termine.', 25000, 'Nosso lar', 'jantar-meme.webp', 'Um brinde ao começo'],
+  ['spa', 'Uma pausa só para nós dois', 'Um dia tranquilo de cuidado e descanso depois de toda a emoção do casamento.', 40000, 'Lua de mel', 'spa-meme.webp', 'Modo descanso'],
+  ['doces', 'Adoçar a nossa nova vida', 'Porque toda boa história de amor merece uma sobremesa para dividir.', 12000, 'Carinhos', 'doces-meme.webp', 'Dividir a sobremesa'],
 ].map(([id, name, description, price_cents, category, art, badge], i) => ({
   id, name, description, price_cents, category, image_url: `/gifts/${art}`, badge, active: 1, sort_order: i,
 }));
+
+export const previousGiftImages = {
+  praia:'beach.svg',viagem:'travel.svg',hotel:'hotel.svg',malas:'luggage.svg',
+  cafe:'coffee.svg',jantar:'dinner.svg',spa:'spa.svg',doces:'sweets.svg',
+};
