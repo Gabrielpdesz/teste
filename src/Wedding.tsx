@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Coffee, Gift as GiftIcon, Heart, House, LockKeyhole, Menu, Minus, Plane, Plus, Search, Smile, Sparkles, X } from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Coffee, Gift as GiftIcon, Heart, House, LockKeyhole, Menu, Minus, Plane, Plus, Search, Sparkles, X } from 'lucide-react';
 import { api, asset, isLocalPreview, money, tabStorage, type Gift, type Order } from './types';
 import { BrandMark } from './BrandMark';
 import { Checkout } from './Checkout';
@@ -7,7 +7,6 @@ import { Dialog } from './Dialog';
 
 const categories = [
   {value:'Todos',label:'Todos os presentes',icon:GiftIcon},
-  {value:'Memes',label:'Memes & risadas',icon:Smile},
   {value:'Nosso lar',label:'Para a nossa casa',icon:House},
   {value:'Lua de mel',label:'Lua de mel',icon:Plane},
   {value:'Carinhos',label:'Pequenos carinhos',icon:Coffee},
@@ -58,7 +57,6 @@ export function Wedding() {
   const closeCheckout=()=>{setSelected(null);setOrder(null);void load();};
   const showCategory=(value:string)=>{setCategory(value);setSearch('');setMenu(false);};
   const featured=gifts.find(g=>g.id==='nao-dei-nada');
-  const homeGift=gifts.find(g=>g.id==='aspirador');
   const faqs=[
     ['Como funciona?','Escolha um presente, deixe seu nome e um recadinho. Não precisa criar uma conta.'],
     ['Os presentes são simbólicos?','Sim! Cada item representa uma contribuição para nossos planos. Os valores são sugestões, e as fotos dos produtos são ilustrativas.'],
@@ -70,7 +68,7 @@ export function Wedding() {
       <a className="monogram" href="#inicio" aria-label="Maria Clara e Gabriel, início"><BrandMark/><span className="header-couple">MARIA CLARA <i>&</i> GABRIEL</span></a>
       <nav aria-label="Navegação principal" className={menu?'nav-open':''}>
         <a className="active" href="#presentes" onClick={()=>setMenu(false)}>Nossa lista</a>
-        <a href="#presentes" onClick={()=>showCategory('Memes')}>Um pouco de zoeira <Smile size={14}/></a>
+        <a href="#presentes" onClick={()=>showCategory('Nosso lar')}>Para a nossa casa</a>
         <a href="#duvidas" onClick={()=>setMenu(false)}>Como funciona</a>
       </nav>
       <span className="header-date">20 <span>AGO</span> 2028 <Heart size={13}/></span>
@@ -81,23 +79,24 @@ export function Wedding() {
       <section id="inicio" className="hero-v2 v2-container">
         <div className="hero-v2-copy">
           <p className="v2-kicker"><span/> NOSSO GRANDE DIA, DO NOSSO JEITO</p>
-          <h1>Casar é coisa séria.<br/><em>Nossa lista,<br className="hero-line"/> nem tanto.</em></h1>
-          <p className="hero-v2-description">Presentes para a casa, planos a dois<br/> e umas boas risadas no caminho.</p>
+          <h1>O começo de tudo.<br/><em>Com um toque seu.</em></h1>
+          <p className="hero-v2-description">Um presente, um carinho, uma boa história.<br/> Faça parte da nossa vida a dois.</p>
           <a className="button primary" href="#presentes" onClick={()=>showCategory('Todos')}>Escolher um presente <ArrowDown size={16}/></a>
-          <div className="hero-v2-signature"><span>Com amor (e bom humor),</span><strong>Maria Clara & Gabriel</strong></div>
+          <div className="hero-v2-signature"><span>Com carinho,</span><strong>Maria Clara & Gabriel</strong></div>
         </div>
         <div className="hero-v2-composition">
           <div className="composition-orbit"/>
           <span className="handwritten composition-note">tem presente pra todo mundo <Heart size={17}/></span>
           <button className="hero-meme" disabled={!featured?.available} onClick={()=>featured&&setSelected(featured)} aria-label="Ver presente Só pra não dizer que não dei nada">
-            <img src={asset('/gifts/terry.jpg')} alt="Meme de Terry Crews com expressão séria" fetchPriority="high"/>
-            <div><span>O CLÁSSICO NUNCA FALHA</span><h2>Só pra não dizer<br/>que não dei nada.</h2><strong>{money(featured?.price_cents??5000)} <ArrowUpRight size={19}/></strong></div>
+            <img src={asset('/gifts/terry.jpg')} alt="Terry Crews com expressão séria" fetchPriority="high"/>
+            <div><h2>Só pra não dizer<br/>que não dei nada.</h2><strong>{money(featured?.price_cents??5000)} <ArrowUpRight size={19}/></strong></div>
           </button>
-          <button className="hero-product" disabled={!homeGift?.available} onClick={()=>homeGift&&setSelected(homeGift)} aria-label="Ver presente Um aspirador de pó BOM de verdade">
-            <span className="product-sticker"><House size={12}/> PRO NOSSO CANTINHO</span>
-            <img src={asset('/gifts/aspirador.webp')} alt="Imagem ilustrativa de aspirador vertical"/>
-            <div><span>Menos poeira.<br/>Mais vida a dois.</span><ArrowUpRight size={18}/></div>
-          </button>
+          <div className="hero-keepsake" aria-label="Maria Clara e Gabriel, 20 de agosto de 2028">
+            <span className="keepsake-caption">O NOSSO PARA SEMPRE</span>
+            <BrandMark/>
+            <span className="keepsake-names">Maria Clara <i>&</i> Gabriel</span>
+            <span className="keepsake-date">20 · 08 · 2028</span>
+          </div>
           <span className="composition-spark"><Sparkles size={28} strokeWidth={1}/></span>
         </div>
       </section>
@@ -105,7 +104,7 @@ export function Wedding() {
       <div className="occasion-strip"><span>20 DE AGOSTO DE 2028</span><Heart size={12}/><span>UM LAR, MIL PLANOS</span><Heart size={12}/><span>E VOCÊ NA NOSSA HISTÓRIA</span></div>
 
       <section id="presentes" className="catalog-v2 v2-container">
-        <div className="catalog-v2-heading"><div><p className="v2-kicker">ESCOLHIDOS A DEDO. ALGUNS, NEM TANTO.</p><h2>Qual presente tem a <em>sua cara?</em></h2></div>{mode==='demo'&&<span className="demo-notice"><span/> Demonstração · sem cobranças</span>}</div>
+        <div className="catalog-v2-heading"><div><p className="v2-kicker">NOSSA LISTA DE PRESENTES</p><h2>Escolha um pouco de <em>felicidade.</em></h2></div>{mode==='demo'&&<span className="demo-notice"><span/> Demonstração · sem cobranças</span>}</div>
         {recentOrder&&<div className="resume-order"><span><GiftIcon size={15}/>{recentOrder.status==='pending'?'Seu presente está em andamento.':'Seu último carinho está registrado.'}</span><button onClick={()=>{setSelected(null);setOrder(recentOrder);}}>Acompanhar meu presente <ArrowRight size={14}/></button></div>}
         {returnError&&<div className="error-message" role="alert">{returnError}</div>}
         <div className="catalog-v2-toolbar">
@@ -115,7 +114,7 @@ export function Wedding() {
         <div className="results-line"><span>{loading?'Preparando a lista…':`${Math.min(limit,visible.length)} de ${visible.length} presentes`}</span><span>Contribuições simbólicas · valores sugeridos</span></div>
         {error&&<div className="error-message" role="alert">{error} <button onClick={()=>{setLoading(true);void load();}}>Tentar novamente</button></div>}
         {loading?<div className="gift-grid">{Array.from({length:8},(_,i)=><div className="skeleton" key={i}/>)}</div>:<div className="gift-grid">{visible.slice(0,limit).map(g=><article key={g.id} className={`gift-card ${g.available?'':'unavailable'}`} data-category={g.category}>
-          <button className="gift-image-button" disabled={!g.available} onClick={()=>setSelected(g)} aria-label={`Ver ${g.name}`}><img src={g.image_url} alt={g.name} loading="lazy"/><span className="gift-category">{g.category==='Nosso lar'?<House size={12}/>:g.category==='Memes'?<Smile size={12}/>:<Heart size={12}/>} {g.category==='Nosso lar'?'Para casa':g.category}</span><span className="gift-image-heart"><ArrowUpRight size={19}/></span></button>
+          <button className="gift-image-button" disabled={!g.available} onClick={()=>setSelected(g)} aria-label={`Ver ${g.name}`}><img src={g.image_url} alt={g.name} loading="lazy"/><span className="gift-image-heart"><ArrowUpRight size={19}/></span></button>
           <div className="gift-info"><h3>{g.name}</h3><div className="gift-bottom"><span className="gift-price">{money(g.price_cents)}</span><button className="gift-action" disabled={!g.available} onClick={()=>setSelected(g)}>{g.available?'Presentear':'Reservado'}{g.available?<ArrowRight size={14}/>:<Check size={14}/>}</button></div></div>
         </article>)}</div>}
         {!loading&&!error&&visible.length===0&&<div className="empty-state"><Search size={28}/><h3>Esse presente ainda não está na lista.</h3><button className="button secondary" onClick={()=>showCategory('Todos')}>Ver todos os presentes</button></div>}
@@ -125,7 +124,7 @@ export function Wedding() {
       <section id="duvidas" className="faq-v2 v2-container"><div><p className="v2-kicker">SEM COMPLICAÇÃO</p><h2>Escolheu, sorriu,<br/><em>presenteou.</em></h2><p>O resto é com a gente.</p></div><div className="faq-list">{faqs.map(([q,a],i)=><div key={q} className={`faq-item ${faq===i?'expanded':''}`}><button aria-expanded={faq===i} aria-controls={`faq-${i}`} onClick={()=>setFaq(faq===i?null:i)}>{q}{faq===i?<Minus size={17}/>:<Plus size={17}/>}</button><div id={`faq-${i}`} hidden={faq!==i}><p>{a}</p></div></div>)}</div></section>
     </main>
 
-    <footer className="footer-v2 v2-container"><div className="footer-couple"><BrandMark/><span>Maria Clara & Gabriel<small>20.08.2028 · COM AMOR E BOM HUMOR</small></span></div><span className="footer-love">O melhor presente é ter você por perto. <Heart size={13}/></span><div><button onClick={()=>setPrivacy(true)}>Privacidade</button><a href={preview?'#painel':'/admin'} onClick={e=>{if(preview){e.preventDefault();setPreviewInfo(true);}}}><LockKeyhole size={12}/> Área dos noivos</a></div></footer>
+    <footer className="footer-v2 v2-container"><div className="footer-couple"><BrandMark/><span>Maria Clara & Gabriel<small>20.08.2028 · FEITO COM CARINHO</small></span></div><span className="footer-love">O melhor presente é ter você por perto. <Heart size={13}/></span><div><button onClick={()=>setPrivacy(true)}>Privacidade</button><a href={preview?'#painel':'/admin'} onClick={e=>{if(preview){e.preventDefault();setPreviewInfo(true);}}}><LockKeyhole size={12}/> Área dos noivos</a></div></footer>
 
     {(selected||order)&&<Checkout gift={selected} initialOrder={order} mode={mode} onClose={closeCheckout} onCatalogChange={()=>void load()} onOrderChange={setRecentOrder}/>}
     {previewInfo&&<Dialog title="Área privada dos noivos" onClose={()=>setPreviewInfo(false)}><p className="modal-description">O painel privado está disponível na versão completa do site. Esta demonstração permite conhecer a lista e experimentar os presentes, sem acessar o banco de dados ou receber pagamentos.</p></Dialog>}

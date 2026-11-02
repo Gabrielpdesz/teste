@@ -11,7 +11,7 @@ test('catálogo filtra, busca e ordena sem transbordar a tela',async({page})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/');await expect(page.locator('.gift-card')).toHaveCount(12);
   await expect(page.locator('.demo-notice')).toContainText('Demonstração · sem cobranças');
-  await expect(page.getByRole('heading',{level:1})).toContainText('Casar é coisa séria.');
+  await expect(page.getByRole('heading',{level:1})).toContainText('O começo de tudo.');
   await page.getByRole('button',{name:'Lua de mel',exact:true}).click();
   await expect(page.locator('.gift-card')).toHaveCount(5);
   await page.getByRole('button',{name:'Todos os presentes'}).click();
@@ -80,7 +80,7 @@ test('modal permite saída pelo teclado e devolve foco ao presente',async({page}
 test('nova lista combina memes, itens de casa e mais presentes sob demanda',async({page})=>{
   await page.goto('/');
   await expect(page.locator('.gift-card')).toHaveCount(12);
-  await page.getByRole('button',{name:'Memes & risadas',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Memes & risadas',exact:true})).toHaveCount(0);
   await expect(page.locator('.gift-card').filter({hasText:'Só pra não dizer'})).toHaveCount(1);
   await expect(page.locator('.gift-card').filter({hasText:'Cota para perguntar'})).toHaveCount(1);
   await page.getByRole('button',{name:'Para a nossa casa',exact:true}).click();
