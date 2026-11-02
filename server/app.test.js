@@ -5,6 +5,8 @@ import { createStore, token } from './store.js';
 import { createApp } from './app.js';
 import { hashPassword } from './auth.js';
 import { infinitePay } from './payments.js';
+import { initialGifts } from './catalog.js';
+import legacyGifts from './legacy-catalog.json' with {type:'json'};
 
 const origin='http://localhost:3001';
 const draft={giftId:'cafe',name:'Convidado de Teste',email:'teste@example.com',message:'Felicidades!',method:'pix'};
@@ -29,7 +31,8 @@ async function fixture(t,{mode='demo',provider}={}) {
 test('catálogo usa reais em centavos e não expõe dados dos convidados',async t=>{
   const {request}=await fixture(t);
   const response=await request('/api/gifts');assert.equal(response.status,200);
-  const gifts=await response.json();assert.equal(gifts.length,12);assert.equal(gifts[0].price_cents,7500);
+  const gifts=await response.json();assert.equal(gifts.length,initialGifts.length);assert.equal(gifts.find(g=>g.id==='cafe').price_cents,7500);
+  assert.ok(gifts.some(g=>g.id==='aspirador'&&g.category==='Nosso lar'));assert.ok(gifts.some(g=>g.category==='Memes'));
   assert.equal(gifts[0].available,1);assert.equal(gifts[0].email,undefined);
 });
 
@@ -80,7 +83,7 @@ test('painel privado exige sessão, senha correta e origem permitida',async t=>{
 test('edição do catálogo mantém valor histórico de reservas e permite ocultar itens',async t=>{
   const {request,reserve,store}=await fixture(t);const reserved=await reserve();
   const login=await request('/api/admin/login',{method:'POST',body:{password:'senha-de-teste-segura'}});
-  const gift=store.catalog('demo')[0];const payload={name:gift.name,description:gift.description,price_cents:15000,category:gift.category,image_url:gift.image_url,badge:gift.badge,active:false};
+  const gift=store.catalog('demo').find(g=>g.id==='cafe');const payload={name:gift.name,description:gift.description,price_cents:15000,category:gift.category,image_url:gift.image_url,badge:gift.badge,active:false};
   const res=await request('/api/admin/gifts/cafe',{method:'PUT',headers:{Cookie:login.headers.get('set-cookie').split(';')[0]},body:payload});
   assert.equal(res.status,200);assert.equal(store.order(reserved.data.id).amount_cents,7500);
   assert.equal(store.catalog('demo').some(g=>g.id==='cafe'),false);
@@ -117,7 +120,7 @@ test('webhook consulta provedor; valor divergente não confirma; replay não dup
 test('transação do provedor não pode ser reutilizada para dois presentes',()=>{
   const store=createStore();
   const a=store.reserve(draft,'live',randomUUID(),token(),token()).order;
-  const b=store.reserve({...draft,giftId:'brinde'},'live',randomUUID(),token(),token()).order;
+  const b=store.reserve({...draft,giftId:'netflix'},'live',randomUUID(),token(),token()).order;
   store.confirm(a.id,{success:true,paid:true,amount:7500,transaction_nsu:'mesma',slug:'s1'});
   assert.throws(()=>store.confirm(b.id,{success:true,paid:true,amount:15000,transaction_nsu:'mesma',slug:'s2'}));
   assert.equal(store.order(b.id).status,'pending');assert.equal(store.admin().totals.received,7500);store.close();
@@ -142,5 +145,25 @@ test('persistência sobrevive à reabertura do banco',async t=>{
   const {mkdtempSync,rmSync}=await import('node:fs');const {tmpdir}=await import('node:os');
   const folder=mkdtempSync(`${tmpdir()}/wedding-test-`);t.after(()=>rmSync(folder,{recursive:true,force:true}));
   const first=createStore(`${folder}/db.sqlite`);const reserved=first.reserve(draft,'demo',randomUUID(),token(),token());first.demoConfirm(reserved.order.id);first.close();
-  const second=createStore(`${folder}/db.sqlite`);assert.equal(second.order(reserved.order.id).status,'demo_confirmed');assert.equal(second.catalog('demo')[0].available,0);second.close();
+  const second=createStore(`${folder}/db.sqlite`);assert.equal(second.order(reserved.order.id).status,'demo_confirmed');assert.equal(second.catalog('demo').find(g=>g.id==='cafe').available,0);second.close();
+});
+
+test('novo catálogo preserva edições do casal e pedidos anteriores na migração',async t=>{
+  const {mkdtempSync,rmSync}=await import('node:fs');const {tmpdir}=await import('node:os');
+  const folder=mkdtempSync(`${tmpdir()}/wedding-migration-`);t.after(()=>rmSync(folder,{recursive:true,force:true}));
+  const first=createStore(`${folder}/db.sqlite`);
+  first.db.exec('DELETE FROM gifts; DELETE FROM schema_migrations;');
+  const insert=first.db.prepare('INSERT INTO gifts (id,name,description,price_cents,category,image_url,badge,active,sort_order) VALUES (?,?,?,?,?,?,?,?,?)');
+  for(const gift of legacyGifts)insert.run(...Object.values(gift));
+  first.db.prepare('UPDATE gifts SET name=?,price_cents=? WHERE id=?').run('Café escolhido pelo casal',9900,'cafe');
+  const reserved=first.reserve({...draft,giftId:'buffet'},'demo',randomUUID(),token(),token()).order;
+  first.close();
+  const upgraded=createStore(`${folder}/db.sqlite`);
+  assert.equal(upgraded.catalog('demo').find(g=>g.id==='cafe').name,'Café escolhido pelo casal');
+  assert.equal(upgraded.catalog('demo').find(g=>g.id==='cafe').price_cents,9900);
+  assert.ok(upgraded.catalog('demo').some(g=>g.id==='aspirador'));
+  assert.equal(upgraded.order(reserved.id).gift_name,'Passe VIP para repetir o buffet');
+  assert.equal(upgraded.order(reserved.id).amount_cents,10000);
+  const count=upgraded.catalog('demo').length;upgraded.close();
+  const reopened=createStore(`${folder}/db.sqlite`);assert.equal(reopened.catalog('demo').length,count);reopened.close();
 });

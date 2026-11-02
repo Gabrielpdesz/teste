@@ -3,6 +3,7 @@ import { randomUUID, randomBytes, createHash } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { initialGifts } from './catalog.js';
+import legacyGifts from './legacy-catalog.json' with { type: 'json' };
 
 export const digest = (value) => createHash('sha256').update(value).digest('hex');
 export const token = () => randomBytes(32).toString('hex');
@@ -33,12 +34,23 @@ export function createStore(path = ':memory:') {
     CREATE UNIQUE INDEX IF NOT EXISTS gift_reservation ON orders(gift_id, mode)
       WHERE status IN ('pending','confirmed','demo_confirmed');
     CREATE TABLE IF NOT EXISTS sessions (hash TEXT PRIMARY KEY, expires_at INTEGER NOT NULL);
+    CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY);
   `);
-  if (!db.prepare('SELECT 1 FROM gifts LIMIT 1').get()) {
-    const stmt = db.prepare('INSERT INTO gifts (id,name,description,price_cents,category,image_url,badge,active,sort_order) VALUES (?,?,?,?,?,?,?,?,?)');
+  if (!db.prepare('SELECT 1 FROM schema_migrations WHERE name=?').get('visual-catalog-2026-11-02')) {
+    const columns=['name','description','price_cents','category','image_url','badge','active','sort_order'];
+    const stmt = db.prepare('INSERT OR IGNORE INTO gifts (id,name,description,price_cents,category,image_url,badge,active,sort_order) VALUES (?,?,?,?,?,?,?,?,?)');
     db.exec('BEGIN IMMEDIATE');
     try {
+      // Update only untouched starter gifts. Keep custom edits, existing IDs and order snapshots.
+      for(const previous of legacyGifts){
+        const current=db.prepare('SELECT * FROM gifts WHERE id=?').get(previous.id);
+        if(!current||!columns.every(key=>current[key]===previous[key]))continue;
+        const next=initialGifts.find(g=>g.id===previous.id);
+        if(next)db.prepare(`UPDATE gifts SET ${columns.map(k=>`${k}=?`).join(',')} WHERE id=?`).run(...columns.map(k=>next[k]),previous.id);
+        else db.prepare('UPDATE gifts SET active=0 WHERE id=?').run(previous.id);
+      }
       for (const gift of initialGifts) stmt.run(...Object.values(gift));
+      db.prepare('INSERT INTO schema_migrations (name) VALUES (?)').run('visual-catalog-2026-11-02');
       db.exec('COMMIT');
     } catch (e) { db.exec('ROLLBACK'); throw e; }
   }

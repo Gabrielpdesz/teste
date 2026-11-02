@@ -13,8 +13,8 @@ const orderSchema = z.object({ giftId: z.string().min(1).max(80), name: z.string
 const identifiers = z.object({ transaction_nsu: z.string().regex(/^[a-zA-Z0-9_-]{1,160}$/),
   slug: z.string().regex(/^[a-zA-Z0-9_-]{1,200}$/) });
 const giftSchema = z.object({ name: z.string().trim().min(3).max(100), description: z.string().trim().min(5).max(600),
-  price_cents: z.number().int().min(100).max(100000000), category: z.enum(['Carinhos','Nosso lar','Experiências','Lua de mel']),
-  image_url: z.string().regex(/^\/gifts\/[a-z-]+\.svg$/), badge: z.string().trim().max(45), active: z.boolean() });
+  price_cents: z.number().int().min(100).max(100000000), category: z.enum(['Memes','Carinhos','Nosso lar','Experiências','Lua de mel']),
+  image_url: z.string().regex(/^\/gifts\/[a-z-]+\.(svg|jpg|webp)$/), badge: z.string().trim().max(45), active: z.boolean() });
 
 export function createApp({ store, config, provider }) {
   const app = express();

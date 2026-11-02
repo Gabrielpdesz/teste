@@ -10,22 +10,23 @@ test.beforeEach(async({request})=>{
 test('catálogo filtra, busca e ordena sem transbordar a tela',async({page})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/');await expect(page.locator('.gift-card')).toHaveCount(12);
-  await expect(page.locator('.demo-notice')).toContainText('Você está conhecendo uma demonstração.');
-  await expect(page.getByRole('heading',{level:1})).toContainText('Maria Clara');
+  await expect(page.locator('.demo-notice')).toContainText('Demonstração · sem cobranças');
+  await expect(page.getByRole('heading',{level:1})).toContainText('Casar é coisa séria.');
   await page.getByRole('button',{name:'Lua de mel',exact:true}).click();
-  await expect(page.locator('.gift-card')).toHaveCount(4);
+  await expect(page.locator('.gift-card')).toHaveCount(5);
   await page.getByRole('button',{name:'Todos os presentes'}).click();
-  await page.getByRole('textbox',{name:'Buscar presentes'}).fill('café');await expect(page.locator('.gift-card')).toHaveCount(1);
-  await page.getByRole('textbox',{name:'Buscar presentes'}).fill('zzzzzz');await expect(page.getByText('Nenhum presente por aqui')).toBeVisible();
+  await page.getByRole('textbox',{name:'Buscar presentes'}).fill('antes do nosso');await expect(page.locator('.gift-card')).toHaveCount(1);
+  await page.getByRole('textbox',{name:'Buscar presentes'}).fill('zzzzzz');await expect(page.getByText('Esse presente ainda não está na lista.')).toBeVisible();
   await page.getByRole('button',{name:'Ver todos os presentes'}).click();
   await page.getByRole('combobox',{name:'Ordenar presentes'}).selectOption('asc');
-  await expect(page.locator('.gift-price').first()).toHaveText('R$ 75,00');
+  await expect(page.locator('.gift-price').first()).toHaveText('R$ 50,00');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(errors).toEqual([]);
 });
 
 test('convidado presenteia sem cadastro; painel separa demonstração de receita',async({page},testInfo)=>{
   const guestName=`Ana e Pedro (${testInfo.project.name})`;
   await page.goto('/');
+  await page.getByRole('textbox',{name:'Buscar presentes'}).fill('antes do nosso');
   await page.locator('.gift-card').filter({hasText:'Um café antes'}).getByRole('button',{name:'Presentear',exact:true}).click();
   const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
   await dialog.getByLabel('Seu nome').fill(guestName);await dialog.getByLabel('Seu e-mail').fill('convidados@example.com');
@@ -76,14 +77,31 @@ test('modal permite saída pelo teclado e devolve foco ao presente',async({page}
   await expect(page.getByRole('dialog')).not.toBeVisible();await expect(trigger).toBeFocused();
 });
 
+test('nova lista combina memes, itens de casa e mais presentes sob demanda',async({page})=>{
+  await page.goto('/');
+  await expect(page.locator('.gift-card')).toHaveCount(12);
+  await page.getByRole('button',{name:'Memes & risadas',exact:true}).click();
+  await expect(page.locator('.gift-card').filter({hasText:'Só pra não dizer'})).toHaveCount(1);
+  await expect(page.locator('.gift-card').filter({hasText:'Cota para perguntar'})).toHaveCount(1);
+  await page.getByRole('button',{name:'Para a nossa casa',exact:true}).click();
+  const vacuum=page.locator('.gift-card').filter({hasText:'Um aspirador de pó BOM'});
+  await expect(vacuum.locator('img')).toHaveAttribute('src',/aspirador\.webp$/);
+  await vacuum.getByRole('button',{name:'Presentear',exact:true}).click();
+  await expect(page.getByRole('dialog')).toContainText('R$ 550,00');
+  await page.keyboard.press('Escape');
+  await page.getByRole('button',{name:'Todos os presentes',exact:true}).click();
+  await page.getByRole('button',{name:'Ver mais presentes'}).click();
+  await expect(page.locator('.gift-card')).toHaveCount(24);
+});
+
 test('index independente funciona sem rede, imagens externas ou servidor',async({page,context})=>{
   const errors:string[]=[];const requests:string[]=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
   await context.setOffline(true);
   await page.setContent(await readFile('index.html','utf8'),{waitUntil:'networkidle'});
   await expect(page.locator('.gift-card')).toHaveCount(12);
-  await expect(page.locator('.demo-notice')).toContainText('Prévia local');
-  await page.getByRole('textbox',{name:'Buscar presentes'}).fill('café');await expect(page.locator('.gift-card')).toHaveCount(1);
+  await expect(page.locator('.demo-notice')).toContainText('Demonstração · sem cobranças');
+  await page.getByRole('textbox',{name:'Buscar presentes'}).fill('antes do nosso');await expect(page.locator('.gift-card')).toHaveCount(1);
   await page.locator('.gift-card').getByRole('button',{name:'Presentear',exact:true}).click();
   const dialog=page.getByRole('dialog');await dialog.getByLabel('Seu nome').fill('Teste local');await dialog.getByLabel('Seu e-mail').fill('local@example.com');
   await dialog.getByRole('button',{name:'Continuar demonstração'}).click();await dialog.getByRole('button',{name:'Simular confirmação do presente'}).click();

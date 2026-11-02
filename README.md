@@ -2,9 +2,11 @@
 
 Lista de presentes para **20 de agosto de 2028**, em verde oliva, off-white e dourado. Catálogo responsivo, presentes simbólicos, busca, categorias, ordenação, mensagens dos convidados, pedidos persistidos e painel privado.
 
-A [análise da referência e dos pagamentos](docs/REFERENCIA-E-PAGAMENTOS.md) foi escrita antes da implementação. O vídeo mostra o editor de listas do Casar.com; as demais telas são adaptações próprias. As ilustrações são originais e as fontes são locais, sem depender de um serviço externo em tempo de execução.
+A [análise da referência e dos pagamentos](docs/REFERENCIA-E-PAGAMENTOS.md) foi escrita antes da implementação. A identidade atual combina a paleta do casamento com as fotos de memes enviadas pelo casal, cartões maiores e textos curtos. O catálogo tem 24 sugestões; inicialmente mostra 12, com filtros e botão para ver mais. As fontes e imagens são locais, sem depender de serviços externos durante a navegação.
 
-O monograma MG usa uma versão com fundo transparente preparada a partir da logo enviada pelo casal. Ele aparece no cabeçalho, selo, encerramento, rodapé, área administrativa e ícone da aba. O arquivo `public/wedding-logo.png` também é incluído dentro da prévia independente, sem exigir uma pasta de imagens ao abri-la.
+O monograma MG usa uma versão com fundo transparente preparada a partir da logo enviada pelo casal. Ele aparece no cabeçalho, rodapé e área administrativa. A prévia inclui uma versão WebP otimizada e um ícone de aba menor; o arquivo original `public/wedding-logo.png` está preservado.
+
+As fotos de memes vieram do ZIP enviado pelo usuário. As fotos de aspirador, air fryer, panelas e cafeteira são imagens ilustrativas geradas para o projeto, sem marca ou modelo prometido. Os valores são sugestões de contribuição, não ofertas de uma loja. Os detalhes de cada presente ficam na janela de seleção, mantendo a lista visualmente enxuta.
 
 ## Abrir com um clique no arquivo
 
@@ -41,7 +43,9 @@ npm run admin:setup
 
 Defina uma senha com pelo menos 12 caracteres. A entrada não é exibida. O utilitário guarda somente um hash scrypt em `.local/admin.env` (ignorado pelo Git, permissões restritas). Ele não sobrescreve uma configuração existente. Reinicie o servidor e acesse a rota `/admin`. Não há senha padrão ou recuperação automática. Para produção, configure `ADMIN_PASSWORD_HASH` por um canal seguro de variáveis do serviço e mantenha um procedimento de recuperação. Não informe a senha no chat ou em argumentos de comandos.
 
-O painel permite consultar convidados, mensagens, pedidos, pagamentos e valores reais confirmados; simulações aparecem separadamente. Também permite criar/editar presentes e ocultá-los do catálogo. Os pedidos preservam o nome e o valor do momento da reserva. Escolha entre 12 ilustrações locais; upload de imagens não foi implementado.
+O painel permite consultar convidados, mensagens, pedidos, pagamentos e valores reais confirmados; simulações aparecem separadamente. Também permite criar/editar presentes e ocultá-los do catálogo. Os pedidos preservam o nome e o valor do momento da reserva. A galeria inclui fotos, memes e ilustrações locais; upload de imagens pelo painel não foi implementado.
+
+A migração do catálogo atualiza apenas os presentes iniciais que ainda correspondem exatamente à versão anterior, adiciona novas sugestões e preserva alterações do casal e pedidos existentes. Os presentes antigos não são apagados do banco. A migração é registrada e não volta a sobrescrever dados nos reinícios seguintes.
 
 ## Pagamentos reais: integração preliminar, bloqueada por padrão
 

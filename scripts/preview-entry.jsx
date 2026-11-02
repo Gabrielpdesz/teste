@@ -7,6 +7,7 @@ import '../src/styles.css';
 import '../src/resume.css';
 import '../src/refinements.css';
 import '../src/brand.css';
+import '../src/redesign.css';
 
 // This entry is bundled only into the downloadable preview, never the server app.
 // No HTTP API, payments, guest information or admin credentials are contacted.

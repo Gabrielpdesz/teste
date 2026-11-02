@@ -1,0 +1,134 @@
+[
+  {
+    "id": "cafe",
+    "name": "Um café antes do nosso “sim”",
+    "description": "Para começar esse novo capítulo com o coração quentinho e uma boa xícara de café.",
+    "price_cents": 7500,
+    "category": "Carinhos",
+    "image_url": "/gifts/coffee.svg",
+    "badge": "Um pequeno carinho",
+    "active": 1,
+    "sort_order": 0
+  },
+  {
+    "id": "brinde",
+    "name": "Um brinde ao nosso amor",
+    "description": "Duas taças, um bom vinho e muitos motivos para brindar à vida juntos.",
+    "price_cents": 15000,
+    "category": "Nosso lar",
+    "image_url": "/gifts/wine.svg",
+    "badge": "Para celebrar",
+    "active": 1,
+    "sort_order": 1
+  },
+  {
+    "id": "jantar",
+    "name": "Nosso primeiro jantar de casados",
+    "description": "Uma noite especial, comida boa e aquela conversa que a gente nunca quer que termine.",
+    "price_cents": 25000,
+    "category": "Experiências",
+    "image_url": "/gifts/dinner.svg",
+    "badge": "Queridinho dos convidados",
+    "active": 1,
+    "sort_order": 2
+  },
+  {
+    "id": "flores",
+    "name": "Flores para o nosso novo lar",
+    "description": "Um pouquinho de cor e delicadeza para encher nossa casa de vida.",
+    "price_cents": 18000,
+    "category": "Nosso lar",
+    "image_url": "/gifts/flowers.svg",
+    "badge": "Feito de afeto",
+    "active": 1,
+    "sort_order": 3
+  },
+  {
+    "id": "praia",
+    "name": "Um dia de sol na lua de mel",
+    "description": "Pés na areia, água de coco e tempo para aproveitar a companhia um do outro.",
+    "price_cents": 35000,
+    "category": "Lua de mel",
+    "image_url": "/gifts/beach.svg",
+    "badge": "Memórias a dois",
+    "active": 1,
+    "sort_order": 4
+  },
+  {
+    "id": "buffet",
+    "name": "Passe VIP para repetir o buffet",
+    "description": "Uma contribuição bem-humorada para quem já está de olho na segunda rodada.",
+    "price_cents": 10000,
+    "category": "Carinhos",
+    "image_url": "/gifts/cake.svg",
+    "badge": "Uma dose de bom humor",
+    "active": 1,
+    "sort_order": 5
+  },
+  {
+    "id": "viagem",
+    "name": "Uma aventura na lua de mel",
+    "description": "Ajude a transformar um passeio em uma daquelas histórias que vamos contar para sempre.",
+    "price_cents": 50000,
+    "category": "Lua de mel",
+    "image_url": "/gifts/travel.svg",
+    "badge": "Para nossa próxima história",
+    "active": 1,
+    "sort_order": 6
+  },
+  {
+    "id": "casa",
+    "name": "Um cantinho com a nossa cara",
+    "description": "Um carinho para os pequenos detalhes que vão transformar uma casa no nosso lar.",
+    "price_cents": 65000,
+    "category": "Nosso lar",
+    "image_url": "/gifts/home.svg",
+    "badge": "Nosso começo",
+    "active": 1,
+    "sort_order": 7
+  },
+  {
+    "id": "hotel",
+    "name": "Uma noite nas nuvens",
+    "description": "Uma diária especial para descansar, sonhar e aproveitar os primeiros dias de casados.",
+    "price_cents": 85000,
+    "category": "Lua de mel",
+    "image_url": "/gifts/hotel.svg",
+    "badge": "Um sonho a dois",
+    "active": 1,
+    "sort_order": 8
+  },
+  {
+    "id": "spa",
+    "name": "Uma pausa só para nós dois",
+    "description": "Um dia tranquilo de cuidado e descanso depois de toda a emoção do casamento.",
+    "price_cents": 40000,
+    "category": "Experiências",
+    "image_url": "/gifts/spa.svg",
+    "badge": "Tempo de qualidade",
+    "active": 1,
+    "sort_order": 9
+  },
+  {
+    "id": "malas",
+    "name": "As malas para a nossa aventura",
+    "description": "Uma contribuição para levar os sonhos — e um pouquinho de bagagem — para a lua de mel.",
+    "price_cents": 30000,
+    "category": "Lua de mel",
+    "image_url": "/gifts/luggage.svg",
+    "badge": "Vamos pelo mundo",
+    "active": 1,
+    "sort_order": 10
+  },
+  {
+    "id": "doces",
+    "name": "Adoçar a nossa nova vida",
+    "description": "Porque toda boa história de amor merece uma sobremesa para dividir.",
+    "price_cents": 12000,
+    "category": "Carinhos",
+    "image_url": "/gifts/sweets.svg",
+    "badge": "Doce como esse momento",
+    "active": 1,
+    "sort_order": 11
+  }
+]
